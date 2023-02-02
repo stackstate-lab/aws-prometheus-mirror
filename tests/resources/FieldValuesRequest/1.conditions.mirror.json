@@ -1,0 +1,34 @@
+{
+  "connectionDetails": {
+    "url": "http://localhost:9000",
+    "request_timeout_seconds": 15000
+  },
+  "query": {
+    "conditions": [
+      {
+        "key": "inset",
+        "value": {
+          "value": [
+            "A",
+            "B"
+          ],
+          "_type": "InSetValue"
+        },
+        "_type": "EqualityCondition"
+      }
+    ],
+    "field": {
+      "fieldName": "string",
+      "fieldType": "STRING",
+      "classified": false,
+      "_type": "FieldDescriptor"
+    },
+    "startTime": 1504174208940,
+    "endTime": 1505124608940,
+    "limit": 2147483647,
+    "offset": 0,
+    "latestFirst": true,
+    "_type": "FieldValuesQuery"
+  },
+  "_type": "FieldValuesRequest"
+}

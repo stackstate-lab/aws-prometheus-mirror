@@ -1,0 +1,3 @@
+url: http://localhost:9000/api/v1/query_range
+params: {"query": "name{string=\"stringValue2\", double=\"2.0\", boolean=\"true\", inset=~\"(A)|(B)\"}", "start": 1504400400, "end": 1504411200, "step": 30.0}
+timeout: 15000

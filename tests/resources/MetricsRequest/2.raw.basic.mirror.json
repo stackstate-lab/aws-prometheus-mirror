@@ -1,0 +1,15 @@
+{"connectionDetails": {"url": "http://localhost:9000", "request_timeout_seconds": 15000},
+ "query":{
+ 	"conditions":[
+    {"key":"string","value":{"value":"stringValue2","_type":"StringValue"},"_type":"EqualityCondition"},
+    {"key":"double","value":{"value":2.0,"_type":"DoubleValue"},"_type":"EqualityCondition"},
+    {"key":"boolean","value":{"value":true,"_type":"BooleanValue"},"_type":"EqualityCondition"},
+    {"key":"__gauge__","value":{"value":"name","_type":"StringValue"},"_type":"EqualityCondition"},
+    {"key":"inset","value":{"value":["A","B"],"_type":"InSetValue"},"_type":"EqualityCondition"}
+  ],
+ 	"startTime":1504400400000,
+ 	"endTime":1504411200000,
+ 	"metricField":"double",
+ 	"_type":"MetricsQuery"},
+ "_type":"MetricsRequest"
+ }

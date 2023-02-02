@@ -1,0 +1,3 @@
+url: http://localhost:9000/api/v1/query_range
+body: {"status": "error", "errorType": "bad_data", "error": "parse error at char 67: not a valid duration string: '10.0s'"}
+status: 500

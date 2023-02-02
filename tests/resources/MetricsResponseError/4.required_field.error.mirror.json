@@ -1,0 +1,5 @@
+{
+  "_type": "MetricNotFoundError",
+  "details": "One of ['__gauge__', '__counter__', '~'] is required",
+  "metric":"conditions=[] field=None aggregation=None metric_field='double' start_time=1504400400000 end_time=1504411200000 last_first=False prefix='' limit=1000 offset=0 type_descriptor='MetricsQuery'"
+}

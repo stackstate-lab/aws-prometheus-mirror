@@ -1,0 +1,1 @@
+{"_type": "RemoteMirrorError", "details": "{'status': 'error', 'errorType': 'bad_data', 'error': \"parse error at char 67: not a valid duration string: '10.0s'\"}", "summary": "Prometheus error."}

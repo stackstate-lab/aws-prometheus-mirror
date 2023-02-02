@@ -1,0 +1,8 @@
+{
+  "values":[
+    {"value":"value1","_type":"CompleteValue"},
+    {"value":"value2","_type":"CompleteValue"}
+  ],
+  "isPartial": false,
+  "_type":"FieldValuesResponse"
+}

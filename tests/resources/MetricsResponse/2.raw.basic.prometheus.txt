@@ -1,0 +1,3 @@
+url:http://localhost:9000/api/v1/query_range
+body: {"data": {"result":[{"values": [[1555408501,"1.0"], [1555408601,"2.0"], [1555408701,"3.0"]]}]}}
+status:200

@@ -1,0 +1,3 @@
+url: http://localhost:9000/api/v1/query_range
+params: {"query": "count_over_time(name{string=\"stringValue2\", double=\"2.0\", boolean=\"true\", inset=~\"(A)|(B)\"}[3600s])", "start": 1504400400, "end": 1504411200, "step": 3600.0}
+timeout: 15000

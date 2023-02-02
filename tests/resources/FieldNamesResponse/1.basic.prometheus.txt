@@ -1,0 +1,3 @@
+url:http://localhost:9000/api/v1/labels
+body: {"data": ["label1"]}
+status:200

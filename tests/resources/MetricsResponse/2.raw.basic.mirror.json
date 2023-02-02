@@ -1,0 +1,13 @@
+{
+  "telemetry":{
+    "points":[
+      [1.0, 1555408501000],
+      [2.0, 1555408601000],
+      [3.0, 1555408701000]
+    ],
+    "dataFormat":["value", "timestamp"],
+    "isPartial":false,
+    "_type":"RawMetricTelemetry"
+  },
+  "_type":"MetricsResponse"
+}

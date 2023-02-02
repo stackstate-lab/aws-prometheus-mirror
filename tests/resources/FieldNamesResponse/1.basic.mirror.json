@@ -1,0 +1,10 @@
+{
+  "fields":[
+    {"_type": "FieldDescriptor", "classified": false, "fieldName": "__counter__", "fieldType": "STRING"},
+    {"_type": "FieldDescriptor", "classified": false, "fieldName": "__gauge__", "fieldType": "STRING"},
+    {"_type": "FieldDescriptor", "classified": false, "fieldName": "~", "fieldType": "STRING"},
+    {"fieldName": "label1", "fieldType":"STRING","classified":false,"_type":"FieldDescriptor"}
+  ],
+  "isPartial": false,
+  "_type":"FieldNamesResponse"
+}

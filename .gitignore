@@ -1,0 +1,7 @@
+/__pypackages__/
+/.idea/
+/.env
+/.mypy_cache/
+/.pytest_cache/
+/.pdm.toml
+**/__pycache__

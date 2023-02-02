@@ -1,0 +1,174 @@
+[project]
+name = "aws-prometheus-mirror"
+version = "0.1.0"
+description = "StackState Telemetry Mirror for Prometheus. Supports also AWS Managed Prometheus."
+authors = [
+    {name = "Ravan Naidoo", email = "rnaidoo@stackstate.com"},
+]
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+#######################################################################################################################
+# Prod Dependencies
+#######################################################################################################################
+
+dependencies = [
+    "fastapi>=0.89.1",
+    "boto3>=1.26.61",
+    "botocore>=1.29.61",
+    "pydantic>=1.10.4",
+    "uvicorn>=0.20.0",
+    "requests>=2.28.2",
+]
+
+[build-system]
+requires = ["pdm-pep517>=1.0"]
+build-backend = "pdm.pep517.api"
+
+#######################################################################################################################
+# Optional Prod Dependencies
+#######################################################################################################################
+
+[project.optional-dependencies]
+
+#######################################################################################################################
+# Dev Dependencies
+#######################################################################################################################
+
+[tool]
+[tool.pdm]
+
+#######################################################################################################################
+# Dev Dependencies
+#######################################################################################################################
+
+[tool.pdm.dev-dependencies]
+
+
+dev = [
+    "pytest>=7.2.1",
+    "pytest-sugar>=0.9.6",
+    "httpx>=0.23.3",
+    "requests-mock>=1.10.0",
+    "python-dotenv>=0.21.1",
+]
+format = [
+    "flakehell>=0.9.0",
+    "flake8==3.9.0",
+    "black>=23.1.0",
+    "mypy>=0.991",
+    "isort>=5.12.0",
+]
+
+#######################################################################################################################
+# Scripts
+#######################################################################################################################
+
+[tool.pdm.scripts]
+pre_build = {composite = ["format", "test"]}
+format = {composite = ["isort", "black", "flakehell", "mypy"]}
+test = "pytest -s -p no:logging ./tests"
+clean = "rm -rf build dist"
+
+#######################################################################################################################
+# Helper Scripts
+#######################################################################################################################
+_.env_file = ".env"
+black = "black src tests"
+isort = "isort src"
+flakehell = "flakehell lint ./src/ ./tests/"
+mypy = "mypy src"
+
+#######################################################################################################################
+# iSort
+#######################################################################################################################
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+src_paths=["src", "tests"]
+
+#######################################################################################################################
+# Black
+#######################################################################################################################
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+#######################################################################################################################
+# FlakeHell
+#######################################################################################################################
+
+[tool.flakehell]
+exclude = ["README.rst", "README.md", ".eggs", ".tox", "build",".venv", "tests/test_explore_api.py"]
+include = ["src", "tests"]
+format = "colored"
+max_line_length = 120
+show_source = true
+# Temp fix until issue is fixed https://github.com/flakehell/flakehell/issues/10
+extended_default_ignore=[]
+
+[tool.flakehell.plugins]
+"*" = [
+    "+*",
+    "-E203",
+]
+
+#######################################################################################################################
+# PyTest
+#######################################################################################################################
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning"
+]
+pythonpath = [
+    "src"
+]
+testpaths = [
+    "tests",
+    "integration",
+]
+
+#######################################################################################################################
+# MyPy
+#######################################################################################################################
+
+[tool.mypy]
+python_version = 3.11
+exclude = [
+    '.*test_explore_apis\.py'
+]
+
+[[tool.mypy.overrides]]
+module = "boto3.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "requests.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "botocore.*"
+ignore_missing_imports = true
+
+
+

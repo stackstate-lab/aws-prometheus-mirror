@@ -1,0 +1,12 @@
+{
+  "telemetry": {
+      "points": [
+        [1.0, 1555408501000, 1555408531000],
+        [2.0, 1555408601000, 1555408631000]
+      ],
+      "dataFormat": ["value", "startTimestamp", "endTimestamp"],
+      "isPartial":false,
+      "_type":"AggregatedMetricTelemetry"
+  },
+  "_type":"MetricsResponse"
+}
