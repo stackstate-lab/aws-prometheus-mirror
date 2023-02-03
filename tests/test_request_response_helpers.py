@@ -1,6 +1,5 @@
 import json
 from os import listdir
-import urllib.parse
 from os.path import isfile, join
 import requests_mock
 from fastapi.testclient import TestClient

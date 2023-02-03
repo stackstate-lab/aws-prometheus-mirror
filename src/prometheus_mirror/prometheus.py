@@ -8,6 +8,7 @@ from botocore.auth import SigV4Auth
 from botocore.awsrequest import AWSRequest
 from botocore.config import Config
 from botocore.credentials import Credentials
+from cachetools import TTLCache
 
 from prometheus_mirror.model import (
     AwsConnectionDetails,
@@ -54,7 +55,7 @@ class MetricNotFoundException(Exception):
 
 
 class PrometheusClient:
-    INSTANCES: Dict[str, "PrometheusClient"] = {}
+    INSTANCES: Dict[str, TTLCache] = {}
 
     def __init__(self, config: ConnectionDetails):
         self.connection_details = config
@@ -69,11 +70,22 @@ class PrometheusClient:
 
     @staticmethod
     def get_instance(config: ConnectionDetails):
-        instance = PrometheusClient.INSTANCES.get(config.url, None)
-        if instance is None:
+        if not config.aws:
+            return PrometheusClient(config)
+
+        instance_cache = PrometheusClient.INSTANCES.get(config.url, None)
+        if instance_cache is None:
             instance = PrometheusClient(config)
-            PrometheusClient.INSTANCES[config.url] = instance
-        return instance
+            cache = TTLCache(maxsize=1, ttl=config.aws.token_expiry_seconds - 10)
+            cache["instance"] = instance
+            PrometheusClient.INSTANCES[config.url] = cache
+            instance_cache = cache
+        try:
+            return instance_cache["instance"]
+        except KeyError:
+            instance = PrometheusClient(config)
+            instance_cache["instance"] = instance
+            return instance
 
     def test_connection(self):
         health_uri = "api/v1/labels" if self.credentials else "-/healthy"

@@ -40,6 +40,7 @@ Create a new Mirror datasource:
       "aws_access_key_id": "Optional[str]",
       "aws_secret_access_key": "Optional[str]",
       "aws_session_token": "Optional[str]",
+      "token_expiry_seconds": 900,
       "region_name": "eu-west-1",
       "role_session_name": "StackState-Prometheus-Mirror"
     }

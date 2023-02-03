@@ -9,6 +9,7 @@ class AwsConnectionDetails(BaseModel):
     aws_access_key_id: Optional[str]
     aws_secret_access_key: Optional[str]
     aws_session_token: Optional[str]
+    token_expiry_seconds: int = Field(default=900)
     region_name: str = Field(default="eu-west-1")
     role_session_name: str = Field(default="StackState-Prometheus-Mirror")
 

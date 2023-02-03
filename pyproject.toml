@@ -21,6 +21,7 @@ dependencies = [
     "pydantic>=1.10.4",
     "uvicorn>=0.20.0",
     "requests>=2.28.2",
+    "cachetools>=5.3.0",
 ]
 
 [build-system]
@@ -169,6 +170,10 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "botocore.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "cachetools.*"
 ignore_missing_imports = true
 
 
