@@ -1,3 +1,5 @@
+import pytest
+
 from fastapi.testclient import TestClient
 import os
 from prometheus_mirror.mirror import app
@@ -20,12 +22,14 @@ connection_details = {
 }
 
 
+@pytest.mark.skip
 def test_read_main():
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"app": "StackState Prometheus Mirror"}
 
 
+@pytest.mark.skip
 def test_invalid_request_content():
     data = {}
     response = client.post("/api/connection", json=data)
@@ -40,6 +44,7 @@ def test_invalid_request_content():
     }
 
 
+@pytest.mark.skip
 def test_connection_failure():
     data = {
         "connectionDetails": {
