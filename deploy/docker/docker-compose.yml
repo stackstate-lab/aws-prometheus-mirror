@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  prometheusmirror:
+    image: stackstatelab/prometheus-mirror:latest
+    ports:
+      - "9900:9900"
+    environment:
+      - API_KEY=xxx
