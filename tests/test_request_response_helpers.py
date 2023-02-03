@@ -89,9 +89,6 @@ class TestRequestBase(TestRequestResponseBase):
     def _request(self, mirror_request: str, prometheus_request: str, ctx: Context):
         with requests_mock.Mocker(real_http=False) as m:
             url, params, timeout, body_as_json = self._decompose_prometheus(prometheus_request)
-            if params:
-                params_encoded = urllib.parse.urlencode(params)
-                url = f"{url}?{params_encoded}"
             adapter = m.register_uri(method="GET", url=url, json=ctx.mocked_response, status_code=ctx.status_code)
             response = ctx.app.post(url=ctx.url, json=json.loads(mirror_request))
             if response.status_code != ctx.status_code:

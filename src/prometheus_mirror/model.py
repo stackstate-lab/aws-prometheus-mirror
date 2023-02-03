@@ -136,4 +136,4 @@ class Settings(BaseSettings):
     API_KEY: str = "unsecure"
     RELOAD: bool = False
     PORT: int = 9900
-    WORKERS: int = 6
+    WORKERS: int = 1

@@ -95,7 +95,10 @@ async def fetch_field_value(request: MirrorRequest):
     client = PrometheusClient.get_instance(request.connection_details)
     if not query.field:  # done because of mypy and the optional type
         raise Exception("Field name required")
-    is_partial, values = client.list_label_values(query.field.field_name, query.prefix, query.offset, query.limit)
+    field_name = query.field.field_name
+    if field_name in ["__counter__", "__gauge__"]:
+        field_name = "__name__"
+    is_partial, values = client.list_label_values(field_name, query.prefix, query.offset, query.limit)
     results: List[ValueDescriptor] = []
     for value in values:
         results.append(ValueDescriptor(value=value))
@@ -107,14 +110,6 @@ async def fetch_field_value(request: MirrorRequest):
 async def fetch_field_name(request: MirrorRequest):
     field_response = FieldNameResponse()
     field_names = ["__counter__", "__gauge__", "~"]
-
-    # remove option if user already specified it.
-    conditions = request.query.conditions
-    for condition in conditions:
-        for field_name in list(field_names):
-            if condition.key == field_name:
-                field_names.remove(field_name)
-
     client = PrometheusClient.get_instance(request.connection_details)
     is_partial, labels = client.list_labels(request.query.limit)
     field_names.extend(labels)

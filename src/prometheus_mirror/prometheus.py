@@ -119,7 +119,7 @@ class PrometheusClient:
             window = 30  # default bucket size is 30 seconds
 
         response = self._handle_failed_call(
-            self._do_get(query_uri, params={"query": query_str, "start": start, "end": end, "step": window})
+            self._do_get(query_uri, params={"query": query_str, "start": start, "end": end, "step": int(window)})
         )
         data = response.json()
         self._validate_metric_data(query_str, data)
@@ -205,7 +205,7 @@ class PrometheusClient:
         request = AWSRequest(method=method, url=url, data=data, params=params, headers=headers)
         SigV4Auth(self.credentials, self.service_name, self.region).add_auth(request)
         try:
-            return requests.request(method=method, url=url, headers=dict(request.headers), data=data)
+            return requests.request(method=method, url=url, headers=dict(request.headers), data=data, params=params)
         except Exception as e:
             raise e
 
@@ -218,7 +218,7 @@ class PrometheusClient:
             )
             logging.error(msg)
             logging.error("Response: %s" % response.text)
-            raise Exception(msg)
+            raise Exception(f"{msg}. {response.text}")
         return response
 
 
@@ -265,7 +265,7 @@ class PrometheusQuery:
         return query_element[0][0], query_element[0][1], conditions
 
     def counter_aggregation(self, sts_aggregation: str, window: Optional[int]) -> Optional[Tuple[str, str]]:
-        window_str = "" if window is None else str(window)
+        window_str = "" if window is None else str(int(window))
         # TO DO step greater then window
         full_window = "[" + window_str + "s])[" + window_str + "s:" + self.default_discretion_interval_seconds + "s]"
         return {
