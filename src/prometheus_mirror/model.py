@@ -135,5 +135,5 @@ class TestConnectionResponse(BaseModel):
 class Settings(BaseSettings):
     API_KEY: str = "unsecure"
     RELOAD: bool = False
-    PORT: int = 9090
+    PORT: int = 9900
     WORKERS: int = 6

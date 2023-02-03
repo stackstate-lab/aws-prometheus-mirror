@@ -80,7 +80,7 @@ async def check_connection(request: TestConnectionRequest):
     else:
         return JSONResponse(
             status_code=status_code,
-            content=jsonable_encoder(TestConnectionResponse(error={"details": details}, status=str(status_code))),
+            content=jsonable_encoder(TestConnectionResponse(error={"details": details}, status="FAILURE")),
         )
 
 

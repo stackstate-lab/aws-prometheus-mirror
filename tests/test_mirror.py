@@ -67,7 +67,7 @@ def test_connection_failure():
             "_type": "MetricStoreConnectionError",
             "details": '{"message": "The security token included in the request ' 'is expired"}',
         },
-        "status": "403",
+        "status": "FAILURE",
     }
     assert response.json() == expected_data
 

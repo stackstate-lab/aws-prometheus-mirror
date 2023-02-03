@@ -71,7 +71,7 @@ pre_build = {composite = ["format", "test"]}
 format = {composite = ["isort", "black", "flakehell", "mypy"]}
 test = "pytest -s -p no:logging ./tests"
 clean = "rm -rf build dist"
-serve = "uvicorn prometheus_mirror.mirror:app"
+serve = "uvicorn prometheus_mirror.mirror:app --port 9900"
 
 #######################################################################################################################
 # Helper Scripts
