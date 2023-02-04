@@ -1,5 +1,6 @@
 import logging
 from collections import defaultdict
+from threading import Lock
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import boto3
@@ -54,6 +55,9 @@ class MetricNotFoundException(Exception):
         self.query = query
 
 
+lock = Lock()
+
+
 class PrometheusClient:
     INSTANCES: Dict[str, TTLCache] = {}
 
@@ -71,27 +75,32 @@ class PrometheusClient:
     @staticmethod
     def get_instance(config: ConnectionDetails, check_connection: bool = False):
         if not config.aws or check_connection:
+            instance_cache = PrometheusClient.INSTANCES.get(config.url, None)
+            if instance_cache is not None:
+                with lock:
+                    instance_cache.clear()
             return PrometheusClient(config)
 
         instance_cache = PrometheusClient.INSTANCES.get(config.url, None)
         ttl_seconds = config.aws.token_expiry_seconds - 10
-        if ttl_seconds < 0:
-            ttl_seconds = 5
+        ttl_seconds = 5 if ttl_seconds < 0 else ttl_seconds
         if instance_cache is None:
             instance = PrometheusClient(config)
             cache = TTLCache(maxsize=1, ttl=ttl_seconds)
             cache["instance"] = instance
-            PrometheusClient.INSTANCES[config.url] = cache
+            with lock:
+                PrometheusClient.INSTANCES[config.url] = cache
             instance_cache = cache
         try:
             return instance_cache["instance"]
         except KeyError:
             instance = PrometheusClient(config)
-            if instance_cache.ttl != ttl_seconds:
-                # user changed time to live value
-                instance_cache = TTLCache(maxsize=1, ttl=ttl_seconds)
-                PrometheusClient.INSTANCES[config.url] = instance_cache
-            instance_cache["instance"] = instance
+            with lock:
+                if instance_cache.ttl != ttl_seconds:
+                    # user changed time to live value
+                    instance_cache = TTLCache(maxsize=1, ttl=ttl_seconds)
+                    PrometheusClient.INSTANCES[config.url] = instance_cache
+                instance_cache["instance"] = instance
             return instance
 
     def test_connection(self):
