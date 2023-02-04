@@ -71,9 +71,14 @@ async def root():
     return {"app": "StackState Prometheus Mirror"}
 
 
+@app.get("/healthcheck")
+async def healthcheck():
+    return {"app": "StackState Prometheus Mirror", "status": "OK"}
+
+
 @app.post("/api/connection")
 async def check_connection(request: TestConnectionRequest):
-    client = PrometheusClient.get_instance(request.connection_details)
+    client = PrometheusClient.get_instance(request.connection_details, check_connection=True)
     status_code, details = client.test_connection()
     if status_code == 200:
         return TestConnectionResponse()

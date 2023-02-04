@@ -69,14 +69,17 @@ class PrometheusClient:
         self.nan_interpretation = config.nan_interpretation
 
     @staticmethod
-    def get_instance(config: ConnectionDetails):
-        if not config.aws:
+    def get_instance(config: ConnectionDetails, check_connection: bool = False):
+        if not config.aws or check_connection:
             return PrometheusClient(config)
 
         instance_cache = PrometheusClient.INSTANCES.get(config.url, None)
+        ttl_seconds = config.aws.token_expiry_seconds - 10
+        if ttl_seconds < 0:
+            ttl_seconds = 5
         if instance_cache is None:
             instance = PrometheusClient(config)
-            cache = TTLCache(maxsize=1, ttl=config.aws.token_expiry_seconds - 10)
+            cache = TTLCache(maxsize=1, ttl=ttl_seconds)
             cache["instance"] = instance
             PrometheusClient.INSTANCES[config.url] = cache
             instance_cache = cache
@@ -84,6 +87,10 @@ class PrometheusClient:
             return instance_cache["instance"]
         except KeyError:
             instance = PrometheusClient(config)
+            if instance_cache.ttl != ttl_seconds:
+                # user changed time to live value
+                instance_cache = TTLCache(maxsize=1, ttl=ttl_seconds)
+                PrometheusClient.INSTANCES[config.url] = instance_cache
             instance_cache["instance"] = instance
             return instance
 
