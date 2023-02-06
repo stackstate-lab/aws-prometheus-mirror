@@ -44,19 +44,13 @@ async def validation_exception_handler(request, exc):
 
 
 @app.middleware("http")
-async def add_api_key_header(request: Request, call_next):
-    response = await call_next(request)
-    response.headers["X-MIRROR-API-KEY"] = settings.API_KEY
-    return response
-
-
-@app.middleware("http")
 async def handle_uncaught_exceptions(request: Request, call_next):
     try:
-        return await call_next(request)
+        response = await call_next(request)
     except Exception as e:
+        logger.error(e)
         traceback_info = traceback.format_exc().split("\n")
-        return JSONResponse(
+        response = JSONResponse(
             status_code=500,
             content=jsonable_encoder(
                 RemoteMirrorError(
@@ -64,6 +58,8 @@ async def handle_uncaught_exceptions(request: Request, call_next):
                 )
             ),
         )
+    response.headers["X-MIRROR-API-KEY"] = settings.API_KEY
+    return response
 
 
 @app.get("/")
