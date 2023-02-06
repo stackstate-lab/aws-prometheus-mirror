@@ -220,7 +220,13 @@ class PrometheusClient:
             RoleSessionName=aws.role_session_name,
             ExternalId=aws.external_id,
         )
-        return assumed_role_object["Credentials"]
+        credentials = assumed_role_object["Credentials"]
+        session = boto3.Session(
+            aws_access_key_id=credentials["AccessKeyId"],
+            aws_secret_access_key=credentials["SecretAccessKey"],
+            aws_session_token=credentials["SessionToken"],
+        )
+        return session.get_credentials().get_frozen_credentials()
 
     def _signed_request(
         self,
